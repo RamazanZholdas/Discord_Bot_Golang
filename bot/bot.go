@@ -3,6 +3,7 @@ package bot
 import (
 	"discordTestBot/config"
 	"log"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -36,6 +37,8 @@ func Start() {
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == BotId {
+		return
+	} else if !strings.HasPrefix(m.Content, config.BotPrefix) {
 		return
 	}
 
