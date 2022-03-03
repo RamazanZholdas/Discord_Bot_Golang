@@ -1,4 +1,4 @@
-package helpers
+package functions
 
 var (
 	cipher   = []string{}
