@@ -2,7 +2,9 @@ package bot
 
 import (
 	"discordTestBot/config"
+	"discordTestBot/functions"
 	"log"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -38,8 +40,25 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == BotId {
 		return
 	}
+	request := m.Content[4:]
+	if !strings.HasPrefix(m.Content, config.BotPrefix) {
+		return
+	}
 
-	if m.Content == "ping" {
-		s.ChannelMessageSend(m.ChannelID, "pong")
+	for _, v := range request {
+		if v > 123 {
+			request = functions.Translating(request)
+			break
+		}
+	}
+
+	slice := functions.ParseData(request)
+
+	if slice != nil {
+		for i := range slice {
+			s.ChannelMessageSend(m.ChannelID, slice[i])
+		}
+	} else {
+		s.ChannelMessageSend(m.ChannelID, "movie doesnt exist")
 	}
 }

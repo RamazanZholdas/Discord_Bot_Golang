@@ -16,9 +16,9 @@ https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D
 %5Bwhat%5D=content&m_act%5Bfind%5D=Texas&m_act%5Byear%5D=2012&m_act%5Bcountry%5D=136&m_act%5Bgenre%5D%5B%5D=11
 &m_act%5Bactor%5D=Dylan&m_act%5Bcast%5D=Roy&m_act%5Bcontent_find%5D=serial&m_act%5Bgenre_and%5D=on
 */
-func ParseData() []string {
+func ParseData(movie string) []string {
 	res := []string{}
-	movie, name, nextUrl, timing, info := "Dallas", "", "", "", ""
+	name, nextUrl, timing, info := "", "", "", ""
 	VisitUrl := "https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D=forma&m_act%5Bwhat%5D=content&m_act%5Bfind%5D=" + movie
 	c := colly.NewCollector()
 
