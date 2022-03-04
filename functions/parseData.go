@@ -18,7 +18,7 @@ https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D
 */
 func ParseData(movie string) []string {
 	res := []string{}
-	name, nextUrl, timing, info := "", "", "", ""
+	name, nextUrl, timing, info, rating := "", "", "", "", ""
 	VisitUrl := "https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D=forma&m_act%5Bwhat%5D=content&m_act%5Bfind%5D=" + movie
 	c := colly.NewCollector()
 
@@ -30,19 +30,18 @@ func ParseData(movie string) []string {
 		fmt.Println("We are visiting this site:", r.Request.URL)
 	})
 
-	c.OnHTML(".element.most_wanted>.info", func(h *colly.HTMLElement) {
-		name = h.ChildText("p.name")
+	c.OnHTML(".element.most_wanted", func(h *colly.HTMLElement) {
+		name = h.ChildText(".info>p.name")
 		timing = h.ChildText("span:nth-child(2)")
 		info = h.ChildText("span:nth-child(3)")
+		rating = h.ChildText(".right>div")
 		nextUrl = h.ChildAttr("a", "href")
 		nextUrl = "https://www.kinopoisk.ru" + nextUrl[0:len(nextUrl)-5]
 	})
 
 	c.Visit(VisitUrl)
 
-	res = append(res, name)
-	res = append(res, timing[4:])
-	res = append(res, info)
+	res = append(res, name, timing[4:], info, rating)
 	res = append(res, fmt.Sprint("for detailed information u can visit this site:", nextUrl))
 
 	return res
